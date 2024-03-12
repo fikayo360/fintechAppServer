@@ -3,6 +3,7 @@ import { isTokenValid } from '../helpers/jwt';
 import { StatusCodes } from 'http-status-codes';
 import TokenPayload from '../interfaces/tokenPayload';
 import logger from '../../../config/logger';
+
   const authUser = async (req:Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer")) {
