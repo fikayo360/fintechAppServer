@@ -1,0 +1,41 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var express_1 = __importDefault(require("express"));
+var userRoute_1 = __importDefault(require("./api/v1/routes/userRoute"));
+var transactionRoute_1 = __importDefault(require("./api/v1/routes/transactionRoute"));
+var walletRoute_1 = __importDefault(require("./api/v1/routes/walletRoute"));
+var contributionRoute_1 = __importDefault(require("./api/v1/routes/contributionRoute"));
+var notification_1 = __importDefault(require("./api/v1/routes/notification"));
+var campaignRoute_1 = __importDefault(require("./api/v1/routes/campaignRoute"));
+var rate_limiting_1 = __importDefault(require("./config/rate-limiting"));
+var compression_1 = require("./config/compression");
+var haltOntimeout_1 = __importDefault(require("./api/v1/middlewares/haltOntimeout"));
+var timeout_1 = __importDefault(require("./config/timeout"));
+var cors = require('cors');
+require('dotenv').config();
+var app = (0, express_1.default)();
+var PORT = 5000;
+app.use((0, timeout_1.default)(60000));
+app.use(cors());
+app.use(haltOntimeout_1.default);
+app.use(express_1.default.json());
+app.use(haltOntimeout_1.default);
+app.use(express_1.default.json());
+app.use(haltOntimeout_1.default);
+app.use(rate_limiting_1.default);
+app.use(haltOntimeout_1.default);
+app.use((0, compression_1.compression)());
+app.use(haltOntimeout_1.default);
+// app.use(validateRequestBody)
+app.use('/api/v1/user', userRoute_1.default);
+app.use('/api/v1/transaction', transactionRoute_1.default);
+app.use('/api/v1/wallet', walletRoute_1.default);
+app.use('/api/v1/campaign', campaignRoute_1.default);
+app.use('/api/v1/contribution', contributionRoute_1.default);
+app.use('/api/v1/notification', notification_1.default);
+app.listen(PORT, function () {
+    console.log("app listening on ".concat(PORT));
+});
